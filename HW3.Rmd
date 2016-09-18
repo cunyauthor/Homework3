@@ -1,0 +1,124 @@
+---
+title: "Homework 3"
+author: "Ka Man Chan"
+date: "September 17, 2016"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+``` {r}
+
+## Inititalize the raw data
+
+library(stringr)
+raw.data <-"555-1239Moe Szyslak(636) 555-0113Burns, C. Montgomery555-6542Rev. Timothy Lovejoy555 8904Ned Flanders636-555-3226Simpson, Homer5553642Dr. Julius Hibbert"  
+name<- unlist(str_extract_all(raw.data,"[[:alpha:]., ]{2,}"))
+name
+ 
+#Question 1
+## Use the tools of this chapter to rearrange the vector so that all elements conform to the standard first_name last_name
+
+MyList<-c(",","Rev. ","Dr. ", "C. ")
+for (i in 1:4)
+  name<-str_replace_all(name, MyList[i],"")
+name
+
+#Question 2
+## Construct a logical vector indicating whether a character has a title (i.e. Rev. and Dr.).
+
+name<- unlist(str_extract_all(raw.data,"[[:alpha:]., ]{2,}"))
+Found_Title<-str_detect(name, "[[:alpha:]]{2,3}[.]")
+Found_Title
+ 
+#Question 3
+## Construct a logical vector indicating whether a character has a second name
+
+name<- unlist(str_extract_all(raw.data,"[[:alpha:]., ]{2,}"))
+MyList<-c(",","Rev. ","Dr. ")
+for (i in 1:3)
+  name<-str_replace_all(name, MyList[i],"")
+Found_Second_Name<-str_detect(name,"[[:alpha:]+.]{1,} [[:alpha:]+.]{1,} [[:alpha:]+.]{1,}")
+Found_Second_Name
+ 
+#Describe the types of strings that conform to the following regular expressions and construct an example that is matched by the regular expression
+ 
+#Question 4(1)
+## [0-9] Match any character in the set of 0-9
+## + The preceding item will be matchd one or more time
+## \\$ ends with $
+
+Ans4_1 <- c("01234$")
+unlist(str_extract_all(Ans4_1, "[0-9]+\\$"))
+Ans4_1
+ 
+#Question 4(2)
+## \\b \\b Word boundary; Whole word only
+## Match any character in the set of a-z
+## min number of chararter is one; max number of charactor is four
+
+Ans4_2 <- c("aazz")
+unlist(str_extract_all(Ans4_2, "\\b[a-z]{1,4}\\b"))
+Ans4_2
+ 
+#Question 4(3)
+## . Any character
+## * The preceeding item (.) will be matched zero or more time
+## ? The preceeding item (.) is optional and will be matched at most one
+## \\.txt string .txt
+## $ match end of the string
+
+Ans4_3 <- c("Question4_3.txt")
+unlist(str_extract_all(Ans4_3, ".*?\\.txt$"))
+Ans4_3
+ 
+#Question 4(4)
+## \\d{2} two Digits
+## with character /
+## \\d{2} two digits
+## with character /
+## \\d{4} four digits
+
+Ans4_4 <- c("09/17/2016")
+unlist(str_extract_all(Ans4_4, "\\d{2}/\\d{2}/\\d{4}"))
+Ans4_4
+ 
+#Question 4(5)
+## < character <
+## (  Group starts
+## . Any character
+## +  The preceeding item (.) will be matched one or more time
+## ? The preceeding item (.) is optional and will be matched at most one
+## ) group ends
+## > character >
+## . Any character
+## + The preceeding item (.) will be matched one or more time
+## ? The preceeding item (.) is optional and will be matched at most one
+## < character <
+## / character /
+## \\1 match the one in group (.+/?)
+## > character >
+
+Ans4_5 <- c("<H1>Hello World</H1>")
+unlist(str_extract_all(Ans4_5, "<(.+?)>.+?</\\1>"))
+Ans4_5
+ 
+#Question 9
+## The following code hides a secret message. Crack it with R and regular expressions
+ 
+Original <- "clcopCow1zmstc0d87wnkig7OvdicpNuggvhryn92Gjuwczi8hqrfpRxs5Aj5dwpn0TanwoUwisdijLj8kpf03AT5Idr3coc0bt7yczjatOaootj55t3Nj3ne6c4Sfek.r1w1YwwojigOd6vrfUrbz2.2bkAnbhzgv4R9i05zEcrop.wAgnb.SqoU65fPa1otfb7wEm24k6t3sR9zqe5fy89n6Nd5t9kc4fE905gmc4Rgxo5nhDk!gr"
+
+## extract all string that match Upper case characters : A-Z, dot and exclaimation point 
+secret_msg <- unlist(str_extract_all(Original, "[[:upper:].! ]"))
+secret_msg 
+
+## paste to concate the string
+## sep a character string "" to separate the terms
+## collapse an optional character string "" to separate the results
+secret_msg <- paste(secret_msg, sep="", collapse="")
+
+## replace character dot with a space " "
+secret_msg <- str_replace_all(secret_msg, "[\\.]", " ")
+secret_msg
+```
